@@ -44,8 +44,6 @@ class LogisticRegression():
             X_batches.append(X_shuffled[-no_remaining :,:])
             Y_batches.append(y_shuffled[-no_remaining :])
 
-
-
             for iteration in range(self.max_iter):
 
                 for j in range(len(X_batches)):
