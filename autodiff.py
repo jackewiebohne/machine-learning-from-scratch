@@ -1,3 +1,7 @@
+# This is a simple graph-based autodifferentiation programme. It integrates and derives. Integration is less complete in most cases than derivation. Current methods are analytic. 
+# For non-integrable functions the plan is to add integration via Riemann sums.
+# I hope to complete the code in the future..
+
 from abc import ABC, abstractmethod
 import numpy as np
 
