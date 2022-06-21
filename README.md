@@ -1,6 +1,6 @@
 # machine-learning-from-scratch-experiments
 
-## logistic regression
+### logistic regression
 
 ## neural network:
 
