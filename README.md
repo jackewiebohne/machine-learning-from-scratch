@@ -1,8 +1,8 @@
 # machine-learning-from-scratch-experiments
 
-### logistic regression
-
 ## neural network:
+
+(the file contains all layers, activations etc. together. i'll split up into different files and clean up later)
 
   **layers:** 
   
@@ -28,6 +28,7 @@
    _forthcoming:_
   -    selu
   -    leaky relu
+  
    **optimizers**
   - adam
   - rmsprop
@@ -35,7 +36,9 @@
   - adagrad
  
    _forthcoming:_
-  - 
+  - adabelief
+  - demonadam
+
    **losses**
    
   -    categorical crossentropy (joint with softmax as well as separate; can deal with both sparse and one-hot encodings)
@@ -89,3 +92,6 @@ Total trainable parameters: 10
 ```
 
 (also included as a separate file called 'conv test.py' are various tests of my CNN backprop against other implementations)
+
+
+### logistic regression
