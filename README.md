@@ -12,7 +12,7 @@ contains:
   -  cnn (fully vectorised)
   -  dropout
     
-    forthcoming:
+    _forthcoming:_
   -    max and avg pooling
   -    layernorm
   -    flatten
@@ -27,7 +27,7 @@ contains:
   -    sigmoid
   -    softmax
       
-      forthcoming:
+      _forthcoming:_
   -      selu
   -      leaky relu
         
