@@ -28,8 +28,8 @@ contains:
   -    softmax
       
    _forthcoming:_
-  -      selu
-  -      leaky relu
+  -    selu
+  -    leaky relu
         
    **losses**
    
