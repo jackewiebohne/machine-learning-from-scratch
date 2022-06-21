@@ -5,39 +5,45 @@ contains:
 **logistic regression**
 
 **neural network:**
+
   **layers:** 
-    dense
-    cnn (fully vectorised)
-    dropout
+  
+  -  dense
+  -  cnn (fully vectorised)
+  -  dropout
     
     forthcoming:
-      max and avg pooling
-      layernorm
-      flatten
-      linear attention
-      masked and multi-head attention blocks
-      positional encoding
+  -    max and avg pooling
+  -    layernorm
+  -    flatten
+  -    linear attention
+  -    masked and multi-head attention blocks
+  -    positional encoding
       
    **activations:**
-      relu
-      tanh
-      sigmoid
-      softmax
+   
+  -    relu
+  -    tanh
+  -    sigmoid
+  -    softmax
       
       forthcoming:
-        selu
-        leaky relu
+  -      selu
+  -      leaky relu
         
    **losses**
-      categorical crossentropy (joint with softmax as well as separate; can deal with both sparse and one-hot encodings)
-      MSE
+   
+  -    categorical crossentropy (joint with softmax as well as separate; can deal with both sparse and one-hot encodings)
+  -    MSE
       
    **metrics**
-      accuracy
+   
+  -    accuracy
       
    **callbacks**
-      early stopping (on epoch end) based on accuracy in training, validation, or combination thereof
+  -    early stopping (on epoch end) based on accuracy in training, validation, or combination thereof
       
    **further features**
-      prints and summarises the model in a manner similar to tensorflow
-      also provides a history of loss, metrics etc.
+   
+  -    prints and summarises the model in a manner similar to tensorflow
+  -    also provides a history of loss, metrics etc.
