@@ -55,7 +55,7 @@
 
 
 _Example:_
-`
+```
 xs = np.array([[1.0,2.0,3.0,4.0,5.0,6.0]]).T    
 ys = np.array([[1.0,1.5,2.0,2.5,3.0,3.5]]).T
 validation = np.array([[7.0, 8.0]]).T, np.array([[4.0, 4.5]]).T
@@ -68,19 +68,24 @@ validation=validation, metrics=Accuracy(precision=0.2), \
 verbose=1, callbacks=('train_valid_multiconditional', 0.99, 0.001))
 
 m.predict(np.array([[9]])) # should be 5
-`
+```
 
 or
 
-`
+```
 m = Model([
             Conv2D(1, (3,3))
 ])
 m.compile(n_features=3)
 m.summary()
+```
+this gives
 
->>> ---------------------------
->>> | conv2D_0 | (3, 3, 3, 1) |
->>> ---------------------------
->>> Total trainable parameters: 10
-`
+```
+---------------------------
+| conv2D_0 | (3, 3, 3, 1) |
+---------------------------
+Total trainable parameters: 10
+```
+
+(also included as a separate file called 'conv test.py' are various tests of my CNN backprop against other implementations)
