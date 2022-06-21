@@ -1,10 +1,8 @@
 # machine-learning-from-scratch-experiments
 
-contains:
+## logistic regression
 
-**logistic regression**
-
-**neural network:**
+## neural network:
 
   **layers:** 
   
