@@ -1,5 +1,11 @@
 # machine-learning-from-scratch-experiments
 
+## TOC:
+1. [neural network](#neural-network)
+2. [logistic regression](#logistic-regression)
+3. [k cluster](#k-cluster)
+
+
 ## neural network:
 
 (the file contains all layers, activations etc. together. i'll split up into different files and clean up later)
@@ -94,4 +100,25 @@ Total trainable parameters: 10
 (also included as a separate file called 'conv test.py' are various tests of my CNN backprop against other implementations)
 
 
-### logistic regression
+## logistic regression
+
+## k cluster
+__Example:__
+```
+x1 = np.random.randn(200,2) 
+x2 = np.random.randn(400,2) - 5
+plt.scatter(x1[:,0], x1[:,1])
+plt.scatter(x2[:,0], x2[:,1])
+plt.show()
+
+
+clusters = k_cluster(2, method='medians',init='forgy', verbose=2, distance='euclidian', convergence_memory=1)
+clusters.fit(x)
+print('initial centers', clusters.initial_centers)
+print('best fit centers', clusters.clustervals, '\n')
+```
+this gives: 
+```
+initial centers [array([-5.14219959, -5.25282999]), array([-6.79148878, -4.43687351])]
+best fit centers [array([ 0.07997409, -0.02929862]), array([-5.10684104, -4.96894499])] 
+```
