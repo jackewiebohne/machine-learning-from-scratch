@@ -121,9 +121,9 @@ x2 = np.random.randn(400,2) - 5
 plt.scatter(x1[:,0], x1[:,1])
 plt.scatter(x2[:,0], x2[:,1])
 plt.show()
-
+```
 ![](https://github.com/jackewiebohne/machine-learning-from-scratch/blob/master/k_cluster.png)
-
+```
 clusters = k_cluster(2, method='medians',init='forgy', verbose=2, distance='euclidian', convergence_memory=1)
 clusters.fit(x)
 print('initial centers', clusters.initial_centers)
