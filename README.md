@@ -129,6 +129,7 @@ print('initial centers', clusters.initial_centers)
 print('best fit centers', clusters.clustervals, '\n')
 ```
 this gives: 
+
 ![](https://github.com/jackewiebohne/machine-learning-from-scratch/blob/master/clusters.gif)
 ```
 initial centers [array([-5.14219959, -5.25282999]), array([-6.79148878, -4.43687351])]
