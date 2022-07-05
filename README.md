@@ -4,6 +4,7 @@
 1. [neural network](#neural-network)
 2. [logistic regression](#logistic-regression)
 3. [k cluster](#k-cluster)
+4. [k nearest neighbor](#knn)
 
 
 ## neural network:
@@ -135,4 +136,29 @@ this gives:
 ```
 initial centers [array([-5.14219959, -5.25282999]), array([-6.79148878, -4.43687351])]
 best fit centers [array([ 0.07997409, -0.02929862]), array([-5.10684104, -4.96894499])] 
+```
+
+## knn
+k nearest neighbor
+can do 'exact' and 'approximate' (via locality sensitive hashing, using hyperplanes and hamming distance)
+exact will be nearly always faster (since it is fully vectorised)
+default distance measure is euclidian, but cosine distance is also implemented (but not recommended)
+includes plotting at choosable levels of elaboration
+
+__Example:__
+```
+x1 = np.random.randn(200,2)
+x2 = np.random.randn(400,2) - 5
+y1 = np.ones(200)
+y2 = np.zeros(400)
+x3 = np.random.randn(10, 2) - 3
+plt.scatter(x1[:,0], x1[:,1])
+plt.scatter(x2[:,0], x2[:,1])
+plt.scatter(x3[:,0], x3[:,1])
+plt.show()
+```
+
+```
+kn = knn(3,x_train = np.vstack((x1, x2)), y_train=np.hstack((y1, y2)), method='approximate', measure='euclid', verbose=1)
+out = kn.predict(x3)
 ```
