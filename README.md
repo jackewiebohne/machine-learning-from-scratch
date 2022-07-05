@@ -157,8 +157,16 @@ plt.scatter(x2[:,0], x2[:,1])
 plt.scatter(x3[:,0], x3[:,1])
 plt.show()
 ```
+shows:
 
+![](https://github.com/jackewiebohne/machine-learning-from-scratch/blob/master/knn.png)
 ```
 kn = knn(3,x_train = np.vstack((x1, x2)), y_train=np.hstack((y1, y2)), method='approximate', measure='euclid', verbose=1)
 out = kn.predict(x3)
+```
+outputs:
+
+![]()
+```
+[0 1 0 0 0 0 0 0 1 1] # 'exact' would output [0 0 0 0 0 0 0 0 1 1]
 ```
