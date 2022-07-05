@@ -112,6 +112,8 @@ has 4 different initializations:
                   then clusters the clusters and uses the best fitting ones for initialization
  - k-means++: (can also be used with k-medians) the most commonly used, but not as competitive as bradley-fayyad
 
+also has inbuilt plotting in choosable degrees of elaboration 
+
 __Example:__
 ```
 x1 = np.random.randn(200,2) 
@@ -127,6 +129,7 @@ print('initial centers', clusters.initial_centers)
 print('best fit centers', clusters.clustervals, '\n')
 ```
 this gives: 
+![](https://github.com/jackewiebohne/machine-learning-from-scratch/blob/master/clusters.gif)
 ```
 initial centers [array([-5.14219959, -5.25282999]), array([-6.79148878, -4.43687351])]
 best fit centers [array([ 0.07997409, -0.02929862]), array([-5.10684104, -4.96894499])] 
