@@ -166,7 +166,7 @@ out = kn.predict(x3)
 ```
 outputs:
 
-![]()
+![](https://github.com/jackewiebohne/machine-learning-from-scratch/blob/master/knn%20pred.png)
 ```
 [0 1 0 0 0 0 0 0 1 1] # 'exact' would output [0 0 0 0 0 0 0 0 1 1]
 ```
