@@ -1,4 +1,4 @@
-# machine-learning-from-scratch-experiments
+# machine-learning-from-scratch
 
 ## TOC:
 1. [neural network](#neural-network)
