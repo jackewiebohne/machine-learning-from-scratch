@@ -713,6 +713,7 @@ class Model():
     def _generate_batches(self, x, y, batch_size):
         # generates batches of n-dimensional arrays that are shuffled
         # note that the first dimension of the array MUST be the batches (not RBG channels etc.)
+        assert batch_size <= len(x)
         if batch_size != len(x):
             choices = set(range(len(x))) 
             for i in range(0, len(x)-batch_size, batch_size):
