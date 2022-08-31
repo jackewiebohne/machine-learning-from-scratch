@@ -327,118 +327,92 @@ class tree:
         print_subroutine(self.root, string, 0)
         return '\n'.join(string)
 
-# t = tree()
-# t.feature = 'root'
-
-# t.left = tree()
-# t.left.depth = 1
-# t.left.feature = 'bla'
-# t.left.left = tree()
-# t.left.left.depth = 2
-# t.left.left.feature = 'bla1'
-
-# t.right = tree()
-# t.right.depth = 1
-# t.right.feature = 'blub'
-# t.right.right = tree()
-# t.right.right.depth = 2
-# t.right.right.feature = 'blub1'
-# t.right.right.right = tree()
-# t.right.right.right.depth = 3
-# t.right.right.right.feature = 'blub2'
-# t.right.right.right.right = tree()
-# t.right.right.right.right.depth = 4
-# t.right.right.right.right.feature = 'blub3' 
-
-# t.right.right.right.left = tree()
-# t.right.right.right.left.depth = 4
-# t.right.right.right.left.feature = 'bla2'
-# print(t._get_internal_nodes())
-
-# y = np.hstack((np.ones(6), np.zeros(4)))
-# print(max([len(y[y == label])/len(y) for label in np.unique(y)]))
-
-###########
+########### Cost-Complexity Pruning example ###########
 # example from: http://mlwiki.org/index.php/Cost-Complexity_Pruning
-# t = tree()
-# t.root = t
-# t.root.feature = 1 # 'Y'
-# t.root.threshold = 1.5
-# t.root.n = 16
-# t.root.depth = 0
-# # leaf
-# t.root.left = tree() 
-# t.root.left.label = 1
-# t.root.left.deth = 1
+t = tree()
+t.root = t
+t.root.feature = 1 # 'Y'
+t.root.threshold = 1.5
+t.root.n = 16
+t.root.depth = 0
+# leaf
+t.root.left = tree() 
+t.root.left.label = 1
+t.root.left.deth = 1
 
-# t.root.right = tree()
-# t.root.right.feature = 0 # 'X'
-# t.root.right.threshold = 2.5
-# t.root.right.depth = 1
-# # leaf
-# t.root.right.left = tree() 
-# t.root.right.left.label = 0
-# t.root.right.left.depth = 2
+t.root.right = tree()
+t.root.right.feature = 0 # 'X'
+t.root.right.threshold = 2.5
+t.root.right.depth = 1
+# leaf
+t.root.right.left = tree() 
+t.root.right.left.label = 0
+t.root.right.left.depth = 2
 
-# t.root.right.right = tree()
-# t.root.right.right.feature = 1 # 'Y'
-# t.root.right.right.threshold = 2.5
-# t.root.right.right.depth = 2
-# # leaves
-# t.root.right.right.left = tree()
-# t.root.right.right.left.label = 0
-# t.root.right.right.left.depth = 3
-# t.root.right.right.right = tree()
-# t.root.right.right.right.label = 1
-# t.root.right.right.right.depth = 3
+t.root.right.right = tree()
+t.root.right.right.feature = 1 # 'Y'
+t.root.right.right.threshold = 2.5
+t.root.right.right.depth = 2
+# leaves
+t.root.right.right.left = tree()
+t.root.right.right.left.label = 0
+t.root.right.right.left.depth = 3
+t.root.right.right.right = tree()
+t.root.right.right.right.label = 1
+t.root.right.right.right.depth = 3
 
-# x = np.array(
-#     # the following are: y = 0; i.e. the o symbols in the example
-#     [[1,2],
-#     [1,3],
-#     [1,4],
-#     [2,2],
-#     [2,3],
-#     [2,4],
-#     [3,2],
-#     [4,2],
-#     # y = 1; i.e. the black squares
-#     [1,1],
-#     [2,1],
-#     [3,1],
-#     [4,1],
-#     [3,3],
-#     [3,4],
-#     [4,3],
-#     [4,4]]
-#     )
-# y = np.hstack((np.zeros(8), np.ones(8)))
-# print(t.get_trees_with_alphas('misclassification', x, y))
+x = np.array(
+    # the following are: y = 0; i.e. the o symbols in the example
+    [[1,2],
+    [1,3],
+    [1,4],
+    [2,2],
+    [2,3],
+    [2,4],
+    [3,2],
+    [4,2],
+    # y = 1; i.e. the black squares
+    [1,1],
+    [2,1],
+    [3,1],
+    [4,1],
+    [3,3],
+    [3,4],
+    [4,3],
+    [4,4]]
+    )
+y = np.hstack((np.zeros(8), np.ones(8)))
+print(t.get_trees_with_alphas('misclassification', x, y))
+# => effective alphas are: [0, 0.125, 0.125, 0.25]
 
-############
+########### Comparing Classification and Regression with Scikit-learn ###########
+# example taken and amended from: https://github.com/zziz/cart/blob/master/cart.py
 from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
 from sklearn import tree as sktree
 
-# def classification_example():
-#     print('\n\nClassification Tree')
-#     iris = load_iris()
-#     X, y = iris.data, iris.target
-#     X_train, X_test, y_train, y_test = train_test_split(X, y, random_state = 42)
+def classification_example():
+    print('\n\nClassification Tree')
+    iris = load_iris()
+    X, y = iris.data, iris.target
+    X_train, X_test, y_train, y_test = train_test_split(X, y, random_state = 42)
 
-#     cls = tree(tree_type='classification', measure='entropy', max_depth=3, min_count=2)
-#     cls.fit(X_train, y_train)
-#     print(cls)
+    cls = tree(tree_type='classification', measure='entropy', max_depth=3, min_count=2)
+    cls.fit(X_train, y_train)
+    print(cls)
 
-#     pred = cls.predict(X_test)
-#     print("This Classification Tree Prediction Accuracy:    {}".format(sum(pred == y_test) / len(pred)))
+    pred = cls.predict(X_test)
+    print("This Classification Tree Prediction Accuracy:    {}".format(sum(pred == y_test) / len(pred)))
+    # => 0.9736842105263158
+    
+    clf = sktree.DecisionTreeClassifier(criterion = 'entropy')
+    clf = clf.fit(X_train, y_train)
+    sk_pred = clf.predict(X_test)
 
-#     clf = sktree.DecisionTreeClassifier(criterion = 'entropy')
-#     clf = clf.fit(X_train, y_train)
-#     sk_pred = clf.predict(X_test)
-
-#     print("Sklearn Library Tree Prediction Accuracy:        {}".format(sum(sk_pred == y_test) / len(pred)))
-
+    print("Sklearn Library Tree Prediction Accuracy:        {}".format(sum(sk_pred == y_test) / len(pred)))
+    # => 0.9736842105263158
+    # both trees thus have identical accuracy
+    
 def regression_example():
     print('\n\nRegression Tree')
     randy = np.random.RandomState(1)
@@ -451,15 +425,17 @@ def regression_example():
     reg.fit(X, y)
     print(reg.root.max_depth)
     print(reg)
-    print(reg.root._get_max_depth())
 
     pred = reg.predict(np.sort(4 * randy.rand(1, 1), axis = 0))
     print('This Regression Tree Prediction:            {}'.format(pred))
-
+    # => [0.75196085]
+    
     sk_reg = sktree.DecisionTreeRegressor(max_depth = 3)
     sk_reg.fit(X, y)
     sk_pred = sk_reg.predict(np.sort(4 * randy.rand(1, 1), axis = 0))
     print('Sklearn Library Regression Tree Prediction: {}'.format(sk_pred))
+    # => [0.75196085]
+    # both trees have identical predictions in this case
 
-# classification_example()
+classification_example()
 regression_example()
