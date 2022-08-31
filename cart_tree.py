@@ -3,13 +3,6 @@ from matplotlib import pyplot as plt
 from matplotlib.pyplot import cm
 import copy
 
-# b = (0,0)
-# lam = lambda b,i,n: (b:=(i,n) if n>b[-1] else 0)
-# x = np.array([2,3,4])
-# # any(lam(b, i, n) for i,n in enumerate(x))
-# [b:=(i,n) for i,n in enumerate(x) if n>b[-1]]
-# print(b)
-
 class tree:
     '''
     decision tree based on CART algorithm (though entropy is possible as criterion here)
