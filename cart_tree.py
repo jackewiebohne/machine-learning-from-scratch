@@ -97,8 +97,7 @@ class tree:
             self.label = majority[0]
         else:
             self.label = np.mean(y)
-        
-
+            
         # pre-pruning/early stopping
         if self.depth + 1 > self.max_depth or self.n < self.min_count:
             return
@@ -383,7 +382,7 @@ x = np.array(
     )
 y = np.hstack((np.zeros(8), np.ones(8)))
 print(t.get_trees_with_alphas('misclassification', x, y))
-# => effective alphas are: [0, 0.125, 0.125, 0.25]
+# => effective alphas are: [0, 0.125, 0.125, 0.25];
 
 ########### Comparing Classification and Regression with Scikit-learn ###########
 # example taken and amended from: https://github.com/zziz/cart/blob/master/cart.py
