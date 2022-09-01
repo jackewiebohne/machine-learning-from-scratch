@@ -86,15 +86,3 @@ def generate_batches(x, y, batch_size):
                 yield (x_batch, y_batch)
         yield (x[list(choices), ...], y[list(choices)]) # otherwise the generator will forget about the last batch
     else: yield (x, y)
-
-
-
-x = np.arange(11)
-y = np.hstack((np.ones(5), np.zeros(6)))
-print(train_test_split(x,y, 0.05))
-# for ele in k_splits(3,x,y,True):
-#     print(ele[0])
-#     print(ele[1])
-#     print()
-
-print(np.argsort(np.ones(2))[:2])
