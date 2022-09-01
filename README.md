@@ -104,9 +104,9 @@ Total trainable parameters: 10
 ## logistic regression
 
 ## k cluster
-k-means or k-medians clustering
+k-means or k-medians clustering that
 can be combined with L1 (Manhattan) or L2 (Euclidean) distance metrics
-has 4 different initializations: 
+and has 4 different initializations: 
  - forgy (random selection of k points from data)
  - random partition (creates k random partitions the data and uses their means/medians for initialization of centers)
  - bradly fayyad: (= for best results!) creates 10 subsamples of 10% of data for initial clusters, 
