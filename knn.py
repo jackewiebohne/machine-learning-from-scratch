@@ -36,9 +36,9 @@ class knn:
                            else uses cosine distance, euclid is highly recommended however
             verbose : int: if 0 then just gives result, if 1 then it plots the clusters incl. test-set
                            cluster membership, if 2 it plots each x_test with its associated hashes
-            *args : int: number of hyperplanes. if not provided it uses log2(len(x_train)/4) 
+            *args : int: number of hyperplanes. if not provided it uses log2(len(x_train)/20) 
                          many hyperplanes (since each hyperplane divides the space into two, n hyperplanes
-                         divide the space into 2^n that would mean we get about 4 elements per hash bin/hyperplane subspace)
+                         divide the space into 2^n that would mean we get about 20 elements per hash bin/hyperplane subspace)
                          
         '''
         self.k = k
@@ -50,7 +50,7 @@ class knn:
         self.verbose = verbose
         self.hash_dict = {}
         if self.method == 'approximate':
-            self.n_hyperplanes = args[0] if args else np.ceil(np.log2(len(self.x_train)/4)).astype(int)
+            self.n_hyperplanes = args[0] if args else np.ceil(np.log2(len(self.x_train)/20)).astype(int)
             # generate the hyperplanes
             self.hyperplanes = np.random.randn(self.dims, self.n_hyperplanes)
             # get the sign of the dot product of hyperplanes and x_train
