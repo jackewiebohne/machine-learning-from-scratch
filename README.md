@@ -141,7 +141,7 @@ best fit centers [array([ 0.07997409, -0.02929862]), array([-5.10684104, -4.9689
 ## knn
 k nearest neighbor
 can do 'exact' and 'approximate' (via locality sensitive hashing, using hyperplanes and hamming distance)
-exact will be nearly always faster (since it is fully vectorised)
+exact will often be faster (since it is fully vectorised) unless dealing with a huge dataset
 default distance measure is euclidian, but cosine distance is also implemented (but not recommended)
 includes plotting at choosable levels of elaboration
 
