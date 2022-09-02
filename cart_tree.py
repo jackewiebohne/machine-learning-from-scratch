@@ -18,11 +18,14 @@ class tree:
                                 'mse', 'entropy', or 'gini', or 'misclassification'
         max_depth: int: maximum depth of tree (0-indexed) at which it will terminate 
         min_count: int: minimum number of samples for split
-
+        random_features: int or None (default): for random forest; if None, all features will be considered. 
+                        However if 1 it will still sample with replacement from
+                        all features at each node if an int of the same size as the available features is chosen, whereas it will not if None. 
+ 
     note: underscore methods might have to be called with .root, because some assume that the tree object (with its root) has already 
           been created
     '''
-    def __init__(self, tree_type='classification', measure='entropy', max_depth=4, min_count=5):
+    def __init__(self, tree_type='classification', measure='entropy', max_depth=4, min_count=5, random_features=None):
         assert (tree_type == 'classification' and measure in ('entropy', 'gini')) or (tree_type == 'regression')
         self.prune_dispatcher = {'mse': self._get_mse, 'gini': self._get_gini,
                       'entropy': self._get_entropy, 
@@ -32,6 +35,7 @@ class tree:
         self.max_depth = max_depth
         self.min_count = min_count
         self.measure = measure
+        self.random_features = random_features
         self.depth = 0
         self.left = None
         self.right = None
@@ -78,8 +82,8 @@ class tree:
     def _best_feature_split(self, x, y):
         self.n = x.shape[0]
 
-        # need more than 1 sample and ground truth for split
-        if self.n <= 1 or len(np.unique(y)) == 1:
+        # need more than 1 ground truth for split
+        if len(np.unique(y)) == 1:
             self.label = y[0]
             return
 
@@ -90,7 +94,7 @@ class tree:
             self.label = majority[0]
         else:
             self.label = np.mean(y)
-            
+
         # pre-pruning/early stopping
         if self.depth + 1 > self.max_depth or self.n < self.min_count:
             return
@@ -103,8 +107,14 @@ class tree:
         # since we're only working with numerical (not categorical) values
         # we sort values in current feature (which np.unique does automatically), 
         # so that the next highest rows for this feature are next to each other
-        # then average the feature's row value with the next highest row value. this will give the thresholds to test.
-        for feature in range(x.shape[1]):
+        # then average the feature's row value with the next highest row value. 
+        # this will give the thresholds to test.
+        # for random forests we'll also allow for random feature selection (with replacement) at each node
+        if self.random_features is not None:
+            feature_idx = np.unique(np.random.choice(x.shape[1], size=self.random_features, replace=True)) # we use np.unique here since we don't need to loop over duplicate features again
+        else: feature_idx = range(x.shape[1])
+
+        for feature in feature_idx:
             features = np.unique(x[:, feature]) # sorted & unique features
             thresholds = (features[1:] + features[:-1]) / 2 # get avg of row value to next highest row value 
             # initialise "best" variable which will hold: (best_gain, best_threshold)
@@ -133,18 +143,18 @@ class tree:
         self.threshold = best_threshold
 
         # recursively split on left
-        self.left = tree(self.tree_type, self.measure, self.max_depth, self.min_count)
+        self.left = tree(self.tree_type, self.measure, self.max_depth, self.min_count, self.random_features)
         self.left.depth = self.depth + 1
         self.left.prev_impurity = self.impurity
         self.left._best_feature_split(x[x[:,self.feature] <= self.threshold], y[x[:,self.feature] <= self.threshold])
         # recursively split on right
-        self.right = tree(self.tree_type, self.measure, self.max_depth, self.min_count)
+        self.right = tree(self.tree_type, self.measure, self.max_depth, self.min_count, self.random_features)
         self.right.depth = self.depth + 1
         self.right.prev_impurity = self.impurity
         self.right._best_feature_split(x[x[:,self.feature] > self.threshold], y[x[:,self.feature] > self.threshold])
 
     def fit(self, x, y):
-        self.root = tree(self.tree_type, self.measure, self.max_depth, self.min_count)
+        self.root = tree(self.tree_type, self.measure, self.max_depth, self.min_count, self.random_features)
         self.root._best_feature_split(x, y)
 
     def _get_subtrees(self):
@@ -318,116 +328,3 @@ class tree:
                 print_subroutine(treepart.right, string, depth+1)
         print_subroutine(self.root, string, 0)
         return '\n'.join(string)
-
-########### Cost-Complexity Pruning example ###########
-# example from: http://mlwiki.org/index.php/Cost-Complexity_Pruning
-t = tree()
-t.root = t
-t.root.feature = 1 # 'Y'
-t.root.threshold = 1.5
-t.root.n = 16
-t.root.depth = 0
-# leaf
-t.root.left = tree() 
-t.root.left.label = 1
-t.root.left.deth = 1
-
-t.root.right = tree()
-t.root.right.feature = 0 # 'X'
-t.root.right.threshold = 2.5
-t.root.right.depth = 1
-# leaf
-t.root.right.left = tree() 
-t.root.right.left.label = 0
-t.root.right.left.depth = 2
-
-t.root.right.right = tree()
-t.root.right.right.feature = 1 # 'Y'
-t.root.right.right.threshold = 2.5
-t.root.right.right.depth = 2
-# leaves
-t.root.right.right.left = tree()
-t.root.right.right.left.label = 0
-t.root.right.right.left.depth = 3
-t.root.right.right.right = tree()
-t.root.right.right.right.label = 1
-t.root.right.right.right.depth = 3
-
-x = np.array(
-    # the following are: y = 0; i.e. the o symbols in the example
-    [[1,2],
-    [1,3],
-    [1,4],
-    [2,2],
-    [2,3],
-    [2,4],
-    [3,2],
-    [4,2],
-    # y = 1; i.e. the black squares
-    [1,1],
-    [2,1],
-    [3,1],
-    [4,1],
-    [3,3],
-    [3,4],
-    [4,3],
-    [4,4]]
-    )
-y = np.hstack((np.zeros(8), np.ones(8)))
-print(t.get_trees_with_alphas('misclassification', x, y))
-# => effective alphas are: [0, 0.125, 0.125, 0.25];
-
-########### Comparing Classification and Regression with Scikit-learn ###########
-# example taken and amended from: https://github.com/zziz/cart/blob/master/cart.py
-from sklearn.datasets import load_iris
-from sklearn.model_selection import train_test_split
-from sklearn import tree as sktree
-
-def classification_example():
-    print('\n\nClassification Tree')
-    iris = load_iris()
-    X, y = iris.data, iris.target
-    X_train, X_test, y_train, y_test = train_test_split(X, y, random_state = 42)
-
-    cls = tree(tree_type='classification', measure='entropy', max_depth=3, min_count=2)
-    cls.fit(X_train, y_train)
-    print(cls)
-
-    pred = cls.predict(X_test)
-    print("This Classification Tree Prediction Accuracy:    {}".format(sum(pred == y_test) / len(pred)))
-    # => 0.9736842105263158
-    
-    clf = sktree.DecisionTreeClassifier(criterion = 'entropy')
-    clf = clf.fit(X_train, y_train)
-    sk_pred = clf.predict(X_test)
-
-    print("Sklearn Library Tree Prediction Accuracy:        {}".format(sum(sk_pred == y_test) / len(pred)))
-    # => 0.9736842105263158
-    # both trees thus have identical accuracy
-    
-def regression_example():
-    print('\n\nRegression Tree')
-    randy = np.random.RandomState(1)
-    X = np.sort(randy.randn(1000, 1) * 4, axis=0)
-    y = np.sin(X).ravel()
-    y[::5] += 3 * (0.5 - randy.rand(200))
-
-    # Fit regression model
-    reg = tree(tree_type='regression', measure='mse', max_depth=3, min_count=5)
-    reg.fit(X, y)
-    print(reg.root.max_depth)
-    print(reg)
-
-    pred = reg.predict(np.sort(4 * randy.rand(1, 1), axis = 0))
-    print('This Regression Tree Prediction:            {}'.format(pred))
-    # => [0.75196085]
-    
-    sk_reg = sktree.DecisionTreeRegressor(max_depth = 3)
-    sk_reg.fit(X, y)
-    sk_pred = sk_reg.predict(np.sort(4 * randy.rand(1, 1), axis = 0))
-    print('Sklearn Library Regression Tree Prediction: {}'.format(sk_pred))
-    # => [0.75196085]
-    # both trees have identical predictions in this case
-
-classification_example()
-regression_example()
