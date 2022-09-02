@@ -5,6 +5,8 @@
 2. [logistic regression](#logistic-regression)
 3. [k cluster](#k-cluster)
 4. [k nearest neighbor](#knn)
+5. [decision tree (CART)](#decision-tree)
+6. [random forest (based on CART trees)](#random-forest)
 
 
 ## neural network:
@@ -170,3 +172,105 @@ outputs:
 ```
 [0 1 0 0 0 0 0 0 1 1] # 'exact' would output [0 0 0 0 0 0 0 0 1 1]
 ```
+
+
+## decision tree
+based on Breiman's CART algorithm
+it can regress and classify, but does not handle categorical data
+
+__Example:__
+```
+########### Comparing Classification and Regression with Scikit-learn ###########
+# examples taken and amended from: https://github.com/zziz/cart/blob/master/cart.py
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn import tree as sktree
+
+# Classification Tree
+iris = load_iris()
+X, y = iris.data, iris.target
+X_train, X_test, y_train, y_test = train_test_split(X, y, random_state = 42)
+
+cls = tree(tree_type='classification', measure='entropy', max_depth=3, min_count=2)
+cls.fit(X_train, y_train)
+print(cls)
+
+pred = cls.predict(X_test)
+print("This Classification Tree Prediction Accuracy:    {}".format(sum(pred == y_test) / len(pred)))
+# => 0.9736842105263158
+
+clf = sktree.DecisionTreeClassifier(criterion = 'entropy')
+clf = clf.fit(X_train, y_train)
+sk_pred = clf.predict(X_test)
+
+print("Sklearn Library Tree Prediction Accuracy:        {}".format(sum(sk_pred == y_test) / len(pred)))
+# => 0.9736842105263158
+# both trees thus have identical accuracy
+    
+# Regression
+randy = np.random.RandomState(1)
+X = np.sort(randy.randn(1000, 1) * 4, axis=0)
+y = np.sin(X).ravel()
+y[::5] += 3 * (0.5 - randy.rand(200))
+
+# Fit regression model
+reg = tree(tree_type='regression', measure='mse', max_depth=3, min_count=5)
+reg.fit(X, y)
+print(reg.root.max_depth)
+print(reg)
+
+pred = reg.predict(np.sort(4 * randy.rand(1, 1), axis = 0))
+print('This Regression Tree Prediction:            {}'.format(pred))
+# => [0.75196085]
+
+sk_reg = sktree.DecisionTreeRegressor(max_depth = 3)
+sk_reg.fit(X, y)
+sk_pred = sk_reg.predict(np.sort(4 * randy.rand(1, 1), axis = 0))
+print('Sklearn Library Regression Tree Prediction: {}'.format(sk_pred))
+# => [0.75196085]
+# both trees have identical predictions in this case
+```
+
+
+## random forest
+random forest based on Breiman's random forest, which is in turn based on his CART decision trees
+
+__Example:__
+```
+# more or less same example as for decision trees above
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+
+iris = load_iris()
+X, y = iris.data, iris.target
+X_train, X_test, y_train, y_test = train_test_split(X, y, random_state = 42)
+# print(X_test.shape)
+
+forest = random_forest(tree_type='classification', n_estimators=50, measure='entropy', max_depth=4, min_count=5, random_features=2, subsample=2/3, oob=True)
+forest.fit(X_train, y_train)
+
+pred = forest.predict(X_test)
+print("Classification Forest Prediction Accuracy: {}".format(sum(pred == y_test) / len(pred)))
+# Classification Forest Prediction Accuracy:    1.0
+forest.estimate_generalization_error(X_train, y_train)
+# approximate general classification accuracy: 0.9375
+
+randy = np.random.RandomState(1)
+X = np.sort(randy.randn(1000, 1) * 4, axis=0)
+y = np.sin(X).ravel()
+y[::5] += 3 * (0.5 - randy.rand(200))
+
+forest = random_forest(tree_type='regression', n_estimators=50, measure='mse', max_depth=3, min_count=5, random_features=2, subsample=2/3, oob=True)
+forest.fit(X, y)
+
+x_test = np.sort(4 * randy.randn(100, 1), axis = 0)
+y_test = np.sin(x_test).ravel() 
+y_test[::5] += 3 * (0.5 - randy.rand(20))
+
+pred = forest.predict(x_test)
+print('Regression Tree Prediction MSE: {}'.format( np.mean(np.sqrt((y_test-pred)**2))))
+# This Regression Tree Prediction mse: 0.3284577649008208
+forest.estimate_generalization_error(X, y)
+# approximate general regression MSE: 0.32890628351818996
+# with a range of y values: 4.748878783141422, and a mean of y values -0.022932134404935297 
+# which gives proportion of y range to mse 0.06925977657838125 and proportion of mse to y mean 14.342593572424073
