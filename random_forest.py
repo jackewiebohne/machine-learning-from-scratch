@@ -125,3 +125,46 @@ class random_forest:
             print(f'approximate general regression MSE: {mse}\n \
                     with a range of y values: {y_range}, and a mean of y values {y_mean} \n \
                     which gives proportion of y range to mse {mse/y_range} and proportion of mse to y mean {abs(mse/y_mean)}')
+
+# # examples and testing
+# from sklearn.datasets import load_iris
+# from sklearn.model_selection import train_test_split
+
+# def classification_example():
+#     iris = load_iris()
+#     X, y = iris.data, iris.target
+#     X_train, X_test, y_train, y_test = train_test_split(X, y, random_state = 42)
+#     # print(X_test.shape)
+
+#     forest = random_forest(tree_type='classification', n_estimators=50, measure='entropy', max_depth=4, min_count=5, random_features=2, subsample=2/3, oob=True)
+#     forest.fit(X_train, y_train)
+
+#     pred = forest.predict(X_test)
+#     print("Classification Forest Prediction Accuracy: {}".format(sum(pred == y_test) / len(pred)))
+#     # Classification Forest Prediction Accuracy:    1.0
+#     forest.estimate_generalization_error(X_train, y_train)
+#     # approximate general classification accuracy: 0.9375
+
+# def regression_example():
+#     randy = np.random.RandomState(1)
+#     X = np.sort(randy.randn(1000, 1) * 4, axis=0)
+#     y = np.sin(X).ravel()
+#     y[::5] += 3 * (0.5 - randy.rand(200))
+
+#     forest = random_forest(tree_type='regression', n_estimators=50, measure='mse', max_depth=3, min_count=5, random_features=2, subsample=2/3, oob=True)
+#     forest.fit(X, y)
+
+#     x_test = np.sort(4 * randy.randn(100, 1), axis = 0)
+#     y_test = np.sin(x_test).ravel() 
+#     y_test[::5] += 3 * (0.5 - randy.rand(20))
+    
+#     pred = forest.predict(x_test)
+#     print('Regression Tree Prediction MSE: {}'.format( np.mean(np.sqrt((y_test-pred)**2))))
+#     # This Regression Tree Prediction mse: 0.3284577649008208
+#     forest.estimate_generalization_error(X, y)
+#     # approximate general regression MSE: 0.32890628351818996
+#     # with a range of y values: 4.748878783141422, and a mean of y values -0.022932134404935297 
+#     # which gives proportion of y range to mse 0.06925977657838125 and proportion of mse to y mean 14.342593572424073
+
+# classification_example()
+# # regression_example()
